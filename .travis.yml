@@ -62,6 +62,7 @@ matrix:
 install:
 - git submodule update --init --depth 1
 - if [ "${SFIDA_BUILD_CONFIG}" = 'COVERAGE' ]; then pip install --user cpp-coveralls; fi
+- if [ "${SFIDA_BUILD_CONFIG}" = 'SCAN' ]; then pip install --user scan-build; fi
 - export PATH=$HOME/.local/bin:$PATH
 
 before_script:
@@ -95,7 +96,7 @@ script:
   if [ "${SFIDA_BUILD_CONFIG}" = 'SCAN' ]; then
     cd ${TRAVIS_BUILD_DIR}
     mkdir build && cd build
-    scan-build cmake -DCMAKE_BUILD_TYPE=Debug ..
+    scan-build cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang ..
     scan-build cmake --build . --config Debug
   fi
 
