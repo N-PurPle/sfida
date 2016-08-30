@@ -29,7 +29,7 @@ install:
 - export PATH=$HOME/.local/bin:$PATH
 
 before_script:
--|
+- |
   if [ "${COMPILER_NAME}" = 'GCC-5' ]; then
     export CC=gcc-5
     export CXX=g++-5
@@ -37,7 +37,7 @@ before_script:
   fi
 
 script:
--|
+- |
   if [ "${SFIDA_BUILD_CONFIG}" = 'COVERAGE' ]; then
     cd ${TRAVIS_BUILD_DIR}
     cmake -DCMAKE_BUILD_TYPE=Debug .
@@ -46,7 +46,7 @@ script:
   fi
 
 after_success:
--|
+- |
   if [ "${SFIDA_BUILD_CONFIG}" = 'COVERAGE' ]; then
     cd ${TRAVIS_BUILD_DIR}
     coveralls -r ./ -b ./ -E '.*/tests/[^\.].*' -e dependencies --gcov ${CCOV} --gcov-options '\-lp' --verbose
