@@ -61,7 +61,18 @@ matrix:
       env: COMPILER_NAME=CLANG-3.8 SFIDA_BUILD_TYPE=Release SFIDA_BUILD_CONFIG=NORMAL
       addons:
         apt: *apt_common
-
+    # osx clang Debug build
+    - os: osx
+      compiler: clang
+      env: COMPILER_NAME=CLANG-3.8 SFIDA_BUILD_TYPE=Debug SFIDA_BUILD_CONFIG=NORMAL
+      addons:
+        apt: *apt_common
+    # osx clang Release build
+    - os: osx
+      compiler: clang
+      env: COMPILER_NAME=CLANG-3.8 SFIDA_BUILD_TYPE=Release SFIDA_BUILD_CONFIG=NORMAL
+      addons:
+        apt: *apt_common
 
 install:
 - git submodule update --init --depth 1
@@ -76,7 +87,7 @@ before_script:
     export CXX=g++-5
     export CCOV=gcov-5
   fi
-  if [ "${COMPILER_NAME}" = 'CLANG-3.8' ] && [ "${TRAVIS_OS_NAME}" = 'linux' ]; then
+  if [ "${COMPILER_NAME}" = 'CLANG-3.8' ]; then
     export CC=clang-3.8
     export CXX=clang++-3.8
   fi
