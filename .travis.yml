@@ -3,6 +3,9 @@ language: cpp
 
 sudo: required
 
+cache:
+  apt: true
+
 addons:
   apt: &apt_common
     sources: &apt_common_sources
