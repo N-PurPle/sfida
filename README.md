@@ -9,7 +9,7 @@ I try open source game engine programming in C++.
 
 | Platform | Build Status |
 |:--------:|:------------:|
-| Windows | None |
+| Windows | [![Build status](https://ci.appveyor.com/api/projects/status/703edpvhcylwlg41/branch/master?svg=true)](https://ci.appveyor.com/project/NishiiTakahiro/sfida/branch/master) |
 | Mac OS X | None |
 | Linux | [![Build Status](https://travis-ci.org/NishiiTakahiro/sfida.svg?branch=master)](https://travis-ci.org/NishiiTakahiro/sfida) |
 

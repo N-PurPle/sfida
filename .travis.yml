@@ -6,6 +6,10 @@ sudo: required
 cache:
   apt: true
 
+branches:
+  only:
+    - master
+
 addons:
   apt: &apt_common
     sources: &apt_common_sources
