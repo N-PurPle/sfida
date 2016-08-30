@@ -1,0 +1,57 @@
+
+language: cpp
+
+sudo: required
+
+addons:
+  apt: &apt_common
+    sources: &apt_common_sources
+    - ubuntu-toolchain-r-test
+    - llvm-toolchain-precise-3.8
+    - kalakris-cmake
+    packages: &apt_common_packages
+    - cmake
+    - g++-5
+    - gcc-5
+    - clang-3.8
+
+matrix:
+  fast_finish: true
+  include:
+    - os: linux
+      compiler: gcc
+      env: COMPILER_NAME=GCC-5 SFIDA_BUILD_CONFIG=COVERAGE
+      addons:
+        apt: *apt_common
+
+install:
+- if [ "${SFIDA_BUILD_CONFIG}" = 'COVERAGE' ]; then pip install --user cpp-coveralls; fi
+- export PATH=$HOME/.local/bin:$PATH
+
+before_script:
+-|
+  if [ "${COMPILER_NAME}" = 'GCC-5' ]; then
+    export CC=gcc-5
+    export CXX=g++-5
+    export CCOV=gcov-5
+  fi
+
+script:
+-|
+  if [ "${SFIDA_BUILD_CONFIG}" = 'COVERAGE' ]; then
+    cd ${TRAVIS_BUILD_DIR}
+    cmake -DCMAKE_BUILD_TYPE=Debug .
+    cmake --build . --config Debug
+    ctest
+  fi
+
+after_success:
+-|
+  if [ "${SFIDA_BUILD_CONFIG}" = 'COVERAGE' ]; then
+    cd ${TRAVIS_BUILD_DIR}
+    coveralls -r ./ -b ./ -E '.*/tests/[^\.].*' -e dependencies --gcov ${CCOV} --gcov-options '\-lp' --verbose
+  fi
+
+notifications:
+  email: false
+
