@@ -39,6 +39,12 @@ matrix:
       env: COMPILER_NAME=GCC-5 SFIDA_BUILD_TYPE=Release SFIDA_BUILD_CONFIG=NORMAL
       addons:
         apt: *apt_common
+    # linux clang 3.8 Debug scan-build
+    - os: linux
+      compiler: clang
+      env: COMPILER_NAME=CLANG-3.8 SFIDA_BUILD_CONFIG=SCAN
+      addons:
+        apt: *apt_common
     # linux clang 3.8 Debug build
     - os: linux
       compiler: clang
@@ -77,14 +83,20 @@ script:
     cd ${TRAVIS_BUILD_DIR}
     cmake -DCMAKE_BUILD_TYPE=Debug .
     cmake --build . --config Debug
-    ctest
+    ctest --output-on-failure
   fi
   if [ "${SFIDA_BUILD_CONFIG}" = 'NORMAL' ]; then
     cd ${TRAVIS_BUILD_DIR}
     mkdir build && cd build
     cmake -DCMAKE_BUILD_TYPE=${SFIDA_BUILD_TYPE} ..
     cmake --build . --config ${SFIDA_BUILD_TYPE}
-    ctest
+    ctest --output-on-failure
+  fi
+  if [ "${SFIDA_BUILD_CONFIG}" = 'SCAN' ]; then
+    cd ${TRAVIS_BUILD_DIR}
+    mkdir build && cd build
+    scan-build cmake -DCMAKE_BUILD_TYPE=Debug ..
+    scan-build cmake --build . --config Debug
   fi
 
 after_success:
