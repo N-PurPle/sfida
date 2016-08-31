@@ -21,6 +21,7 @@ addons:
     - g++-5
     - gcc-5
     - clang-3.8
+    - ninja-build
 
 matrix:
   fast_finish: true
@@ -74,6 +75,13 @@ matrix:
       addons:
         apt: *apt_common
 
+before_install:
+- |
+  if [ "${TRAVIS_OS_NAME}" = 'osx' ]; then
+    brew update
+    brew install ninja
+  fi
+
 install:
 - git submodule update --init --depth 1
 - if [ "${SFIDA_BUILD_CONFIG}" = 'COVERAGE' ]; then pip install --user cpp-coveralls; fi
@@ -97,21 +105,21 @@ script:
   echo "${TRAVIS_OS_NAME} ${CXX} ${SFIDA_BUILD_TYPE} ${SFIDA_BUILD_CONFIG} build..."
   if [ "${SFIDA_BUILD_CONFIG}" = 'COVERAGE' ]; then
     cd ${TRAVIS_BUILD_DIR}
-    cmake -DCMAKE_BUILD_TYPE=Debug .
+    cmake -GNinja -DCMAKE_BUILD_TYPE=Debug .
     cmake --build . --config Debug
     ctest --output-on-failure
   fi
   if [ "${SFIDA_BUILD_CONFIG}" = 'NORMAL' ]; then
     cd ${TRAVIS_BUILD_DIR}
     mkdir build && cd build
-    cmake -DCMAKE_BUILD_TYPE=${SFIDA_BUILD_TYPE} ..
+    cmake -GNinja -DCMAKE_BUILD_TYPE=${SFIDA_BUILD_TYPE} ..
     cmake --build . --config ${SFIDA_BUILD_TYPE}
     ctest --output-on-failure
   fi
   if [ "${SFIDA_BUILD_CONFIG}" = 'SCAN' ]; then
     cd ${TRAVIS_BUILD_DIR}
     mkdir build && cd build
-    scan-build cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang ..
+    scan-build cmake -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang ..
     scan-build cmake --build . --config Debug
   fi
 
