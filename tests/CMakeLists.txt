@@ -9,6 +9,7 @@ project(sfida_test)
 include_directories(
     ${SFIDA_ROOT}/include
     ${SFIDA_ROOT}/dependencies/googletest/googletest/include
+    ${SFIDA_ROOT}/dependencies/glm
 )
 
 function(add_sfida_test name)

@@ -34,6 +34,7 @@ set(SFIDA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
 include_directories(
     ${SFIDA_ROOT}/include
+    ${SFIDA_ROOT}/dependencies/glm
 )
 
 if(DEFINED ENV{SFIDA_BUILD_CONFIG})
