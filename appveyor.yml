@@ -17,10 +17,6 @@ matrix:
 
 clone_folder: C:\projects\befang
 
-branches:
-  only:
-    - master
-
 environment:
   PYTHON_PATH: "C:/Python27"
   PYTHON_PACKAGE_PATH: "C:/Python27/Scripts"
